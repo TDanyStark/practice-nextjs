@@ -25,20 +25,35 @@ export type State = {
     amount?: string[];
     status?: string[];
   };
+  values?: {
+    customerId?: string;
+    amount?: string;
+    status?: string
+  };
   message?: string | null;
 };
 
-export async function createInvoice(prevState: State, formData: FormData) {
+export async function createInvoice(prevState: State, formData: FormData): Promise<State>  {
   const validatedFields = CreateInvoice.safeParse({
-    customerId: formData.get("customerId"),
-    amount: formData.get("amount"),
-    status: formData.get("status"),
+    customerId: formData.get("customerId") as string,
+    amount: formData.get("amount") as string,
+    status: formData.get("status") as string,
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    const fieldErrors = validatedFields.error.format();
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: {
+        customerId: fieldErrors.customerId?._errors,
+        amount: fieldErrors.amount?._errors,
+        status: fieldErrors.status?._errors,
+      },
+      values: {
+        customerId: formData.get("customerId") as string,
+        amount: formData.get("amount") as string,
+        status: formData.get("status") as string,
+      },
       message: "Missing Fields. Failed to Create Invoice.",
     };
   }
@@ -65,11 +80,11 @@ export async function createInvoice(prevState: State, formData: FormData) {
 // Use Zod to update the expected types
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-export async function updateInvoice(id: string, prevState: State, formData: FormData) {
+export async function updateInvoice(id: string, prevState: State, formData: FormData): Promise<State> {
   const validatedFields = UpdateInvoice.safeParse({
-    customerId: formData.get("customerId"),
-    amount: formData.get("amount"),
-    status: formData.get("status"),
+    customerId: formData.get("customerId") as string,
+    amount: formData.get("amount") as string,
+    status: formData.get("status") as string,
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
