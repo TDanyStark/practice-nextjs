@@ -29,7 +29,7 @@ export default async function Page(props: {
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-        <Suspense fallback={<><p>Loading...</p></>}>
+        <Suspense key={"pagination "+ query + currentPage} fallback={<><p>Loading...</p></>}>
           <Pagination query={query} currentPage={currentPage} />
         </Suspense>
       </div>
