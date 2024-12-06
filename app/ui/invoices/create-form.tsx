@@ -19,7 +19,6 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     values: {} 
   };
   const [state, formAction] = useActionState(createInvoice, initialState);
-  console.log(state);
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
